@@ -25,10 +25,10 @@ router.route('/projects').get(getProjects);
 
 // PUT route to update a project by ID (only accessible by admin)
 router.route('/admin/projects/:id')
-  .put(isAuthenticatedUser, authorizeRoles('admin'), updateProject);
-
+  .put(upload, updateProject)
+  .delete(deleteProject);
 // DELETE route to delete a project by ID (only accessible by admin)
-router.route('/admin/projects/:id')
-  .delete(isAuthenticatedUser, authorizeRoles('admin'), deleteProject);
+// router.route('/admin/projects/:id')
+//   .delete(isAuthenticatedUser, authorizeRoles('admin'), deleteProject);
 
 module.exports = router;
