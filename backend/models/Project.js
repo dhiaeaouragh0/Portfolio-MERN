@@ -5,22 +5,31 @@ const projectSchema = new mongoose.Schema(
     title: {
       type: String,
       required: [true, "Please add a title for the project"],
+      unique: true,
     },
     description: {
       type: String,
       required: [true, "Please add a description for the project"],
     },
-    imageUrl: {
-      type: String,
-      required: false
-    },
+    images: [
+      {
+        public_id: {
+          type: String,
+          required: true,
+        },
+        url: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
     liveDemoUrl: {
       type: String,
-      required: false, // Optional
+      required: false,
     },
     githubRepoUrl: {
       type: String,
-      required: false, // Optional
+      required: false,
     },
     createdAt: {
       type: Date,

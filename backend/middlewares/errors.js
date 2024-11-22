@@ -3,15 +3,17 @@ const ErrorHandler = require('../utils/errorHandler');
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
 
+  // Handling errors in development environment
   if (process.env.NODE_ENV === 'DEVELOPMENT') {
-    res.status(err.statusCode).json({
+    return res.status(err.statusCode).json({
       success: false,
       error: err,
       errMessage: err.message,
-      stack: err.stack
+      stack: err.stack,
     });
   }
 
+  // Handling errors in production environment
   if (process.env.NODE_ENV === 'PRODUCTION') {
     let error = { ...err };
     error.message = err.message;
@@ -45,9 +47,10 @@ module.exports = (err, req, res, next) => {
       error = new ErrorHandler(message, 400);
     }
 
-    res.status(error.statusCode).json({
+    // Send generic error message if no specific handler was triggered
+    return res.status(error.statusCode).json({
       success: false,
-      message: error.message || 'Internal Server Error'
+      message: error.message || 'Internal Server Error',
     });
   }
 };

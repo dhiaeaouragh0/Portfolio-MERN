@@ -5,7 +5,7 @@ const projectRoutes = require('./routes/projectRoutes'); // Import the project r
 dotenv.config();
 
 const app = express();
-
+const errorMiddleware = require('./middlewares/errors')
 // Middleware to parse incoming JSON requests
 app.use(express.json());
 
@@ -16,5 +16,8 @@ app.use('/api/v1', projectRoutes); // Mount the project routes under the /api/v1
 app.get('/', (req, res) => {
   res.send('Portfolio API is running...');
 });
+
+//Middleware to handle errors
+app.use(errorMiddleware);
 
 module.exports = app;
