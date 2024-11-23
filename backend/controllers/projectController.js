@@ -72,31 +72,16 @@ exports.newProject = catchAsyncErrors(async (req, res, next) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Get all projects => /api/v1/projects
 exports.getProjects = catchAsyncErrors(async (req, res, next) => {
   const resPerPage = 6; // Define results per page
 
   // Use APIFeatures for advanced querying
-  const apiFeatures = new APIFeatures(Project.find(), req.query)
-    .search()
-    .filter()
-    .pagination(resPerPage);
+  const apiFeatures = new APIFeatures(Project.find(), req.query).sort()
+  .search()
+  .filter()
+  .pagination(resPerPage);
+
 
   const projects = await apiFeatures.query;
 
@@ -112,6 +97,20 @@ exports.getProjects = catchAsyncErrors(async (req, res, next) => {
 });
 
 
+// Get Single Project => /api/v1/projects/:id
+exports.getSingleProject = catchAsyncErrors(async (req, res, next) => {
+  const project = await Project.findById(req.params.id);
+
+  // If project not found, return error
+  if (!project) {
+    return next(new ErrorHandler('Project not found', 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    project,
+  });
+});
 
 
 
@@ -169,12 +168,6 @@ exports.updateProject = catchAsyncErrors(async (req, res, next) => {
     project,
   });
 });
-
-
-
-
-
-
 
 
 

@@ -7,6 +7,7 @@ const {
   getProjects,
   updateProject,
   deleteProject,
+  getSingleProject,
 } = require('../controllers/projectController');
 
 // Import authentication and authorization middlewares
@@ -20,13 +21,15 @@ const upload = multer({ storage }).array('images'); // Expecting multiple images
 router.route('/admin/projects/new')
   .post(upload, newProject);  // Use multer upload middleware before the controller
 
-// GET route to fetch all projects (accessible by everyone)
 router.route('/projects').get(getProjects);
+router.route('/projects/:id').get(getSingleProject);
 
-// PUT route to update a project by ID (only accessible by admin)
+
 router.route('/admin/projects/:id')
   .put(upload, updateProject)
   .delete(deleteProject);
+
+
 // DELETE route to delete a project by ID (only accessible by admin)
 // router.route('/admin/projects/:id')
 //   .delete(isAuthenticatedUser, authorizeRoles('admin'), deleteProject);
